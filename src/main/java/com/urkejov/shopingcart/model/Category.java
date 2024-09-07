@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -27,5 +28,23 @@ public class Category {
 
     @OneToMany(mappedBy = "category")
     private List<Product> productList;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    private void prePersist() {
+        LocalDateTime date = LocalDateTime.now();
+        this.createdAt = date;
+        this.updatedAt = date;
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 
 }

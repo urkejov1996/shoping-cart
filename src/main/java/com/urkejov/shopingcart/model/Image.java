@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.sql.Blob;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -35,4 +36,22 @@ public class Image {
     @ManyToOne
     @JoinColumn(name = "product_Id")
     private Product product;
+
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
+
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    @PrePersist
+    private void prePersist() {
+        LocalDateTime date = LocalDateTime.now();
+        this.createdAt = date;
+        this.updatedAt = date;
+    }
+
+    @PreUpdate
+    private void preUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
 }
