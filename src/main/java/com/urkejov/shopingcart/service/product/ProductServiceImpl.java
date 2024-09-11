@@ -1,6 +1,8 @@
 package com.urkejov.shopingcart.service.product;
 
+import com.urkejov.shopingcart.exceptions.ProductNotFoundException;
 import com.urkejov.shopingcart.model.Product;
+import com.urkejov.shopingcart.repository.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +21,8 @@ public class ProductServiceImpl implements ProductService{
 
     @Override
     public Product getProductById(String productId) {
-        return null;
+        return productRepository.findById(productId)
+                .orElseThrow(()->new ProductNotFoundException("Product not found"));
     }
 
     @Override
