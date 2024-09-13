@@ -1,8 +1,10 @@
 package com.urkejov.shopingcart.service.product;
 
 import com.urkejov.shopingcart.exceptions.ProductNotFoundException;
+import com.urkejov.shopingcart.model.Category;
 import com.urkejov.shopingcart.model.Product;
 import com.urkejov.shopingcart.repository.ProductRepository;
+import com.urkejov.shopingcart.request.ProductRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +14,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Override
-    public Product addProduct(Product product) {
+    public Product addProduct(ProductRequest productRequest) {
+
+
         return null;
+
+    }
+
+    private Product createProduct(ProductRequest productRequest, Category category){
+        return new Product(
+                productRequest.getName(),
+                productRequest.getBrand(),
+                productRequest.getPrice(),
+                productRequest.getInventory(),
+                productRequest.getDescription(),
+                category
+        );
     }
 
     @Override
@@ -55,21 +71,21 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public List<Product> getProductsByCategoryAndBrand(String category, String brand) {
-        return List.of();
+        return productRepository.findByCategoryNameAndBrand(category, brand);
     }
 
     @Override
     public List<Product> getProductsByName(String name) {
-        return List.of();
+        return productRepository.findByName(name);
     }
 
     @Override
     public List<Product> getProductsByBrandAndName(String brand, String name) {
-        return List.of();
+        return productRepository.findByBrandAndName(brand, name);
     }
 
     @Override
-    public Long countProductsByBrandAndName(String brand, String Name) {
-        return 0;
+    public Long countProductsByBrandAndName(String brand, String name) {
+        return productRepository.countByBrandAndName(brand, name);
     }
 }

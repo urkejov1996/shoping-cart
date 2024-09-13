@@ -1,12 +1,13 @@
 package com.urkejov.shopingcart.service.product;
 
 import com.urkejov.shopingcart.model.Product;
+import com.urkejov.shopingcart.request.ProductRequest;
 
 import java.util.List;
 
 public interface ProductService {
 
-    Product addProduct(Product product);
+    Product addProduct(ProductRequest productRequest);
 
     Product getProductById(String productId);
 

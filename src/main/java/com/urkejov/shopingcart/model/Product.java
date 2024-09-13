@@ -11,9 +11,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@Builder
-@RequiredArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
 
     @Id
@@ -49,6 +47,15 @@ public class Product {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Product(String name, String brand, BigDecimal price, int inventory, String description, Category category) {
+        this.name = name;
+        this.brand = brand;
+        this.price = price;
+        this.inventory = inventory;
+        this.description = description;
+        this.category = category;
+    }
 
     @PrePersist
     private void prePersist() {
