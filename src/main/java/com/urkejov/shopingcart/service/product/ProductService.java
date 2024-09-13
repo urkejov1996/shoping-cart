@@ -1,19 +1,20 @@
 package com.urkejov.shopingcart.service.product;
 
 import com.urkejov.shopingcart.model.Product;
-import com.urkejov.shopingcart.request.ProductRequest;
+import com.urkejov.shopingcart.request.AddProductRequest;
+import com.urkejov.shopingcart.request.UpdateProductRequest;
 
 import java.util.List;
 
 public interface ProductService {
 
-    Product addProduct(ProductRequest productRequest);
+    Product addProduct(AddProductRequest addProductRequest);
 
     Product getProductById(String productId);
 
     void deleteProductById(String productId);
 
-    void updateProduct(Product product, String productId);
+    Product updateProduct(UpdateProductRequest updateProductRequest, String productId);
 
     List<Product> getAllProducts();
 

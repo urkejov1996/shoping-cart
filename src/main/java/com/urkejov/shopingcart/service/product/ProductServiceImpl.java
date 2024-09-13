@@ -3,34 +3,43 @@ package com.urkejov.shopingcart.service.product;
 import com.urkejov.shopingcart.exceptions.ProductNotFoundException;
 import com.urkejov.shopingcart.model.Category;
 import com.urkejov.shopingcart.model.Product;
+import com.urkejov.shopingcart.repository.CategoryRepository;
 import com.urkejov.shopingcart.repository.ProductRepository;
-import com.urkejov.shopingcart.request.ProductRequest;
+import com.urkejov.shopingcart.request.AddProductRequest;
+import com.urkejov.shopingcart.request.UpdateProductRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ProductServiceImpl implements ProductService {
 
     private final ProductRepository productRepository;
+    private final CategoryRepository categoryRepository;
 
     @Override
-    public Product addProduct(ProductRequest productRequest) {
+    public Product addProduct(AddProductRequest addProductRequest) {
 
-
-        return null;
+        Category category = Optional.ofNullable(categoryRepository.findByName(addProductRequest.getCategory().getName()))
+                .orElseGet(() -> {
+                    Category newCategory = new Category(addProductRequest.getCategory().getName());
+                    return categoryRepository.save(newCategory);
+                });
+        addProductRequest.setCategory(category);
+        return productRepository.save(createProduct(addProductRequest, category));
 
     }
 
-    private Product createProduct(ProductRequest productRequest, Category category){
+    private Product createProduct(AddProductRequest addProductRequest, Category category) {
         return new Product(
-                productRequest.getName(),
-                productRequest.getBrand(),
-                productRequest.getPrice(),
-                productRequest.getInventory(),
-                productRequest.getDescription(),
+                addProductRequest.getName(),
+                addProductRequest.getBrand(),
+                addProductRequest.getPrice(),
+                addProductRequest.getInventory(),
+                addProductRequest.getDescription(),
                 category
         );
     }
@@ -50,8 +59,25 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public void updateProduct(Product product, String productId) {
+    public Product updateProduct(UpdateProductRequest updateProductRequest, String productId) {
 
+        return productRepository.findById(productId)
+                .map(existingProduct -> updateExistingProduct(existingProduct, updateProductRequest))
+                .map(productRepository::save)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+
+    }
+
+    private Product updateExistingProduct(Product existingProduct, UpdateProductRequest updateProductRequest) {
+        existingProduct.setName(updateProductRequest.getName());
+        existingProduct.setBrand(updateProductRequest.getBrand());
+        existingProduct.setPrice(updateProductRequest.getPrice());
+        existingProduct.setInventory(updateProductRequest.getInventory());
+        existingProduct.setDescription(updateProductRequest.getDescription());
+
+        Category category = categoryRepository.findByName(updateProductRequest.getCategory().getName());
+        existingProduct.setCategory(category);
+        return existingProduct;
     }
 
     @Override

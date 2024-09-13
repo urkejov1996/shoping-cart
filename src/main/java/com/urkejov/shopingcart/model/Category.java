@@ -1,10 +1,7 @@
 package com.urkejov.shopingcart.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.time.LocalDateTime;
@@ -34,6 +31,10 @@ public class Category {
 
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
+
+    public Category(String name) {
+
+    }
 
     @PrePersist
     private void prePersist() {
