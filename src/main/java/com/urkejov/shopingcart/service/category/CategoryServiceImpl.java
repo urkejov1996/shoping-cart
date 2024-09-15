@@ -3,6 +3,7 @@ package com.urkejov.shopingcart.service.category;
 import com.urkejov.shopingcart.exceptions.ResourceNotFoundException;
 import com.urkejov.shopingcart.model.Category;
 import com.urkejov.shopingcart.repository.CategoryRepository;
+import com.urkejov.shopingcart.request.AddCategoryRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +32,9 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category addCategory(Category category) {
+    public Category addCategory(AddCategoryRequest addCategoryRequest) {
+
+
         return null;
     }
 
