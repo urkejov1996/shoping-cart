@@ -1,5 +1,6 @@
 package com.urkejov.shopingcart.service.category;
 
+import com.urkejov.shopingcart.exceptions.AlreadyExistsException;
 import com.urkejov.shopingcart.exceptions.ResourceNotFoundException;
 import com.urkejov.shopingcart.model.Category;
 import com.urkejov.shopingcart.repository.CategoryRepository;
@@ -8,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -32,15 +34,18 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public Category addCategory(AddCategoryRequest addCategoryRequest) {
-
-
-        return null;
+    public Category addCategory(Category category) {
+        return Optional.of(category).filter(c -> !categoryRepository.existsByName(c.getName()))
+                .map(categoryRepository::save)
+                .orElseThrow(() -> new AlreadyExistsException(category.getName() + " already exists"));
     }
 
     @Override
-    public Category updateCategory(Category category) {
-        return null;
+    public Category updateCategory(Category category, String categoryId) {
+        return Optional.ofNullable(getCategoryById(categoryId)).map(oldCategory -> {
+            oldCategory.setName(category.getName());
+            return categoryRepository.save(oldCategory);
+        }).orElseThrow(() -> new ResourceNotFoundException("Category not found."));
     }
 
     @Override

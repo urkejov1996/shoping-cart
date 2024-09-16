@@ -10,7 +10,7 @@ public interface CategoryService {
     Category getCategoryById(String categoryId);
     Category getCategoryByName(String name);
     List<Category> getAllCategories();
-    Category addCategory(AddCategoryRequest addCategoryRequest);
-    Category updateCategory(Category category);
+    Category addCategory(Category category);
+    Category updateCategory(Category category, String categoryId);
     void deleteCategoryById(String categoryId);
 }
