@@ -1,6 +1,7 @@
 package com.urkejov.shopingcart.controller;
 
 import com.urkejov.shopingcart.exceptions.AlreadyExistsException;
+import com.urkejov.shopingcart.exceptions.ResourceNotFoundException;
 import com.urkejov.shopingcart.model.Category;
 import com.urkejov.shopingcart.response.ApiResponse;
 import com.urkejov.shopingcart.service.category.CategoryService;
@@ -10,8 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.CONFLICT;
-import static org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,6 +38,48 @@ public class CategoryController {
         } catch (AlreadyExistsException e) {
             return ResponseEntity.status(CONFLICT).body(new ApiResponse(e.getMessage(), null));
         }
+    }
+
+    @GetMapping("/category/${id}")
+    public ResponseEntity<ApiResponse> getCategoryById(@PathVariable String id) {
+        try {
+            Category category = categoryService.getCategoryById(id);
+            return ResponseEntity.ok(new ApiResponse("Found!", category));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/category/name/${name}")
+    public ResponseEntity<ApiResponse> getCategoryByName(@PathVariable String name) {
+        try {
+            Category category = categoryService.getCategoryByName(name);
+            return ResponseEntity.ok(new ApiResponse("Found!", category));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/category/${id}")
+    public ResponseEntity<ApiResponse> delete(@PathVariable String id) {
+        try {
+            categoryService.deleteCategoryById(id);
+            return ResponseEntity.ok(new ApiResponse("Delete!", null));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @PutMapping("/category/${id}")
+    public ResponseEntity<ApiResponse> updateCategory(@PathVariable String id, @RequestBody Category category) {
+        try {
+            Category updatedCategory = categoryService.updateCategory(category, id);
+            return ResponseEntity.ok(new ApiResponse("Updated!", updatedCategory));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
+        }
+
+
     }
 
 
