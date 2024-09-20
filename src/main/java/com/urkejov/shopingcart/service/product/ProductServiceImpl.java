@@ -1,6 +1,7 @@
 package com.urkejov.shopingcart.service.product;
 
 import com.urkejov.shopingcart.exceptions.ProductNotFoundException;
+import com.urkejov.shopingcart.exceptions.ResourceNotFoundException;
 import com.urkejov.shopingcart.model.Category;
 import com.urkejov.shopingcart.model.Product;
 import com.urkejov.shopingcart.repository.CategoryRepository;
@@ -47,14 +48,14 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProductById(String productId) {
         return productRepository.findById(productId)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
     }
 
     @Override
     public void deleteProductById(String productId) {
         productRepository.findById(productId)
                 .ifPresentOrElse(productRepository::delete, () -> {
-                    throw new ProductNotFoundException("Product not found");
+                    throw new ResourceNotFoundException("Product not found");
                 });
     }
 
@@ -64,7 +65,7 @@ public class ProductServiceImpl implements ProductService {
         return productRepository.findById(productId)
                 .map(existingProduct -> updateExistingProduct(existingProduct, updateProductRequest))
                 .map(productRepository::save)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
     }
 
