@@ -1,5 +1,6 @@
 package com.urkejov.shopingcart.service.product;
 
+import com.urkejov.shopingcart.dto.ProductDto;
 import com.urkejov.shopingcart.model.Product;
 import com.urkejov.shopingcart.request.AddProductRequest;
 import com.urkejov.shopingcart.request.UpdateProductRequest;
@@ -29,4 +30,6 @@ public interface ProductService {
     List<Product> getProductsByBrandAndName(String brand, String name);
 
     Long countProductsByBrandAndName(String brand, String Name);
+
+    ProductDto convertToDto(Product product);
 }
