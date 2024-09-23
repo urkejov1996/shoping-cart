@@ -31,5 +31,7 @@ public interface ProductService {
 
     Long countProductsByBrandAndName(String brand, String Name);
 
+    List<ProductDto> getConvertedProducts(List<Product> products);
+
     ProductDto convertToDto(Product product);
 }
