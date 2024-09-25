@@ -48,7 +48,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> addProduct(@RequestBody AddProductRequest product) {
         try {
             Product newProduct = productService.addProduct(product);
-            return ResponseEntity.ok(new ApiResponse("Created", newProduct));
+            ProductDto productDto = productService.convertToDto(newProduct);
+            return ResponseEntity.ok(new ApiResponse("Created", productDto));
         } catch (Exception e) {
             return ResponseEntity.status(INTERNAL_SERVER_ERROR).body(new ApiResponse(e.getMessage(), null));
         }
@@ -58,7 +59,8 @@ public class ProductController {
     public ResponseEntity<ApiResponse> updateProduct(@PathVariable String productId, @RequestBody UpdateProductRequest updateProductRequest) {
         try {
             Product product = productService.updateProduct(updateProductRequest, productId);
-            return ResponseEntity.ok(new ApiResponse("Update success!", product));
+            ProductDto productDto = productService.convertToDto(product);
+            return ResponseEntity.ok(new ApiResponse("Update success!", productDto));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(NOT_FOUND).body(new ApiResponse(e.getMessage(), null));
         }
